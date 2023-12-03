@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomNaviagation extends StatelessWidget {
-  const CustomBottomNaviagation({super.key});
+  final int currentIndex;
+  const CustomBottomNaviagation({super.key, required this.currentIndex});
+
+  void onItemTap(BuildContext context, int index) {
+    
+  }
 
   @override
   Widget build(BuildContext context) {
