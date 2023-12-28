@@ -11,7 +11,8 @@ class FavoritesView extends ConsumerStatefulWidget {
   FavoritesViewState createState() => FavoritesViewState();
 }
 
-class FavoritesViewState extends ConsumerState<FavoritesView> {
+class FavoritesViewState extends ConsumerState<FavoritesView>
+    with AutomaticKeepAliveClientMixin {
   bool isLastPage = false;
   bool isLoading = false;
 
@@ -36,27 +37,37 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final favoriteMovies = ref.watch(favoriteMoviesProvider).values.toList();
 
     if (favoriteMovies.isEmpty) {
-    final colors = Theme.of(context).colorScheme;
+      final colors = Theme.of(context).colorScheme;
 
       return Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.favorite_outline_sharp, size: 60,color: colors.primary,),
-            Text('Es triste!!', style: TextStyle(fontSize: 30, color: colors.primary)),
-            const Text("No tienes películas favoritas", style: TextStyle(fontSize: 20, color: Colors.black54 )),
-            const SizedBox(height: 20),
-            FilledButton.tonal(onPressed: ()=> context.go('/home/0'), 
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.primary
-            ),
-            child: const Text("Empieza a agregar", style: TextStyle(fontWeight:FontWeight.w600 ,color: Colors.white),)
-            ),
-          ]),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.favorite_outline_sharp,
+                size: 60,
+                color: colors.primary,
+              ),
+              Text('Es triste!!',
+                  style: TextStyle(fontSize: 30, color: colors.primary)),
+              const Text("No tienes películas favoritas",
+                  style: TextStyle(fontSize: 20, color: Colors.black54)),
+              const SizedBox(height: 20),
+              FilledButton.tonal(
+                  onPressed: () => context.go('/home/0'),
+                  style:
+                      FilledButton.styleFrom(backgroundColor: colors.primary),
+                  child: const Text(
+                    "Empieza a agregar",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: Colors.white),
+                  )),
+            ]),
       );
     }
 
@@ -67,4 +78,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

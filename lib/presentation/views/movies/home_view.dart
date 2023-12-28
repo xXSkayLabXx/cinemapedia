@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
-
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -13,7 +12,10 @@ class HomeView extends ConsumerStatefulWidget {
   HomeViewState createState() => HomeViewState();
 }
 
-class HomeViewState extends ConsumerState<HomeView> {
+class HomeViewState extends ConsumerState<HomeView>
+    with AutomaticKeepAliveClientMixin {
+
+
   @override
   void initState() {
     super.initState();
@@ -26,16 +28,18 @@ class HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final initialLoading = ref.watch(initiaLoadingProvider);
     if (initialLoading) return const FullScreenLoader();
 
-    final nowPalyingMovies = ref.watch(nowPlayingMoviesProvider);
-    final popularMovies = ref.watch(popularMoviesProvider);
-    final upComingMovies = ref.watch(upcomingMoviesProvider);
-    final topRatedMovies = ref.watch(topRatedMoviesProvider);
-
     final sliedShowMovies = ref.watch(moviesSlideshowProvider);
- 
+    final nowPalyingMovies = ref.watch(nowPlayingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+    final upComingMovies = ref.watch(upcomingMoviesProvider);
+   // final popularMovies = ref.watch(popularMoviesProvider);
+
+
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
@@ -55,7 +59,7 @@ class HomeViewState extends ConsumerState<HomeView> {
                 movies: nowPalyingMovies,
                 title: 'En cines',
                 subTitle:
-                    '${DateFormat.EEEE().format(DateTime.now())} ${DateTime.now().day}',
+                    '${DateFormat.EEEE('es').format(DateTime.now())} ${DateTime.now().day}',
                 loadNextPage: () {
                   ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
                 },
@@ -64,18 +68,12 @@ class HomeViewState extends ConsumerState<HomeView> {
               MovieHorizontalListview(
                 movies: upComingMovies,
                 title: 'Proximamente',
+                subTitle: 'En este mes de ${DateFormat.MMMM('es').format(DateTime.now())}',
                 loadNextPage: () {
                   ref.read(upcomingMoviesProvider.notifier).loadNextPage();
                 },
               ),
-              MovieHorizontalListview(
-                movies: popularMovies,
-                title: 'En Populares',
-                subTitle: 'En ${DateFormat.MMMM().format(DateTime.now())}',
-                loadNextPage: () {
-                  ref.read(popularMoviesProvider.notifier).loadNextPage();
-                },
-              ),
+
               MovieHorizontalListview(
                 movies: topRatedMovies,
                 title: 'Mejor Calificada',
@@ -94,4 +92,7 @@ class HomeViewState extends ConsumerState<HomeView> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
